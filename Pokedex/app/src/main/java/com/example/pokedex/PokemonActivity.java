@@ -2,8 +2,11 @@ package com.example.pokedex;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -22,6 +25,7 @@ public class PokemonActivity extends AppCompatActivity {
     private TextView numberTextView;
     private TextView type1TextView;
     private TextView type2TextView;
+    private Button catchButton;
     private String url;
     private RequestQueue requestQueue;
 
@@ -32,7 +36,7 @@ public class PokemonActivity extends AppCompatActivity {
 
         // intent is the object on which intended action is to happen
         url = getIntent().getStringExtra("url");
-//        String name = getIntent().getStringExtra("name");
+        String name = getIntent().getStringExtra("name");
 //        int number = getIntent().getIntExtra("number", 0);
 
         // get view element
@@ -40,6 +44,13 @@ public class PokemonActivity extends AppCompatActivity {
         numberTextView = findViewById(R.id.pokemon_number);  // get number view from activity_number
         type1TextView = findViewById(R.id.pokemon_type1);
         type2TextView = findViewById(R.id.pokemon_type2);
+        catchButton = findViewById(R.id.catch_pokemon);
+
+        if (getPreferences(Context.MODE_PRIVATE).getBoolean(name, false)) {
+            catchButton.setText("Release");
+        } else {
+            catchButton.setText("Catch");
+        }
 
         // request queue
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -92,5 +103,18 @@ public class PokemonActivity extends AppCompatActivity {
         );
 
         requestQueue.add(request);
+    }
+
+    public void toggleCatch(View view) {
+        // change button text to 'Catch' or 'Release'
+        // also change state of pokemon caught in sharedpreferences
+        boolean caught = getPreferences(Context.MODE_PRIVATE).getBoolean(nameTextView.getText().toString(), false);
+        if (caught) {
+            getPreferences(Context.MODE_PRIVATE).edit().putBoolean(nameTextView.getText().toString(), false).commit();
+            catchButton.setText("Catch");
+        } else {
+            getPreferences(Context.MODE_PRIVATE).edit().putBoolean(nameTextView.getText().toString(), true).commit();
+            catchButton.setText("Release");
+        }
     }
 }

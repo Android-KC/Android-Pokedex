@@ -47,7 +47,8 @@ public class PokedexAdapter extends RecyclerView.Adapter<PokedexAdapter.PokedexV
                     Pokemon current = (Pokemon) containerView.getTag();  // cast to Pokemon object that we get from setTag()
                     Intent intent = new Intent(v.getContext(), PokemonActivity.class);  // instantiate intent with context and class of intent activity
                     intent.putExtra("url", current.getUrl());
-                    //intent.putExtra("name", current.getName());   // pass relevant data
+                    // intent.putExtra("caught", // use save state here to get caught bool with current.getName());
+                    intent.putExtra("name", current.getName());   // pass relevant data
                     //intent.putExtra("number", current.getNumber());
 
                     v.getContext().startActivity(intent);   // start activity with intent on view context(
