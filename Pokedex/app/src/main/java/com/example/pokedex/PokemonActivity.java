@@ -34,7 +34,9 @@ public class PokemonActivity extends AppCompatActivity {
     private TextView type2TextView;
     private Button catchButton;
     private ImageView imageView;
+    private TextView pokemonDescription;
     private String url;
+    private String name;
     private RequestQueue requestQueue;
 
     private class DownloadSpriteTask extends AsyncTask<String, Void, Bitmap> {
@@ -64,7 +66,7 @@ public class PokemonActivity extends AppCompatActivity {
 
         // intent is the object on which intended action is to happen
         url = getIntent().getStringExtra("url");
-        String name = getIntent().getStringExtra("name");
+        name = getIntent().getStringExtra("name");
 //        int number = getIntent().getIntExtra("number", 0);
 
         // get view element
@@ -74,6 +76,7 @@ public class PokemonActivity extends AppCompatActivity {
         type2TextView = findViewById(R.id.pokemon_type2);
         catchButton = findViewById(R.id.catch_pokemon);
         imageView = findViewById(R.id.pokemon_image);
+        pokemonDescription = findViewById(R.id.pokemon_description);
 
         if (getPreferences(Context.MODE_PRIVATE).getBoolean(name, false)) {
             catchButton.setText("Release");
@@ -98,44 +101,67 @@ public class PokemonActivity extends AppCompatActivity {
 
         // define request
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            nameTextView.setText(response.getString("name").substring(0, 1).toUpperCase() + response.getString("name").substring(1));
-                            numberTextView.setText(String.format("#%03d", response.getInt("id")));
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        nameTextView.setText(response.getString("name").substring(0, 1).toUpperCase() + response.getString("name").substring(1));
+                        numberTextView.setText(String.format("#%03d", response.getInt("id")));
 
-                            JSONArray typeEntries = response.getJSONArray("types");
-                            for (int i = 0; i < typeEntries.length(); i++) {
-                                JSONObject typeEntry = typeEntries.getJSONObject(i);
-                                int slot = typeEntry.getInt("slot");
-                                String type = typeEntry.getJSONObject("type").getString("name").substring(0, 1).toUpperCase()
-                                        + typeEntry.getJSONObject("type").getString("name").substring(1);
+                        JSONArray typeEntries = response.getJSONArray("types");
+                        for (int i = 0; i < typeEntries.length(); i++) {
+                            JSONObject typeEntry = typeEntries.getJSONObject(i);
+                            int slot = typeEntry.getInt("slot");
+                            String type = typeEntry.getJSONObject("type").getString("name").substring(0, 1).toUpperCase()
+                                    + typeEntry.getJSONObject("type").getString("name").substring(1);
 
-                                if (slot == 1) {
-                                    type1TextView.setText(type);
-                                } else if (slot == 2) {
-                                    type2TextView.setText(type);
-                                }
+                            if (slot == 1) {
+                                type1TextView.setText(type);
+                            } else if (slot == 2) {
+                                type2TextView.setText(type);
                             }
-
-                            JSONObject sprites = response.getJSONObject("sprites");
-                            String front_default = sprites.getString("front_default");
-                            new DownloadSpriteTask().execute(front_default);
-
-                        } catch (JSONException e) {
-                            Log.e("cs50", "Pokemon Json error", e);
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("cs50", "Pokemon details error");
+
+                        JSONObject sprites = response.getJSONObject("sprites");
+                        String front_default = sprites.getString("front_default");
+                        new DownloadSpriteTask().execute(front_default);
+
+                    } catch (JSONException e) {
+                        Log.e("cs50", "Pokemon Json error", e);
                     }
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("cs50", "Pokemon details error");
+                }
+            }
+        );
+        requestQueue.add(request);
+
+        String descriptionUrl = "https://pokeapi.co/api/v2/pokemon-species/" + name.toLowerCase();
+        JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, descriptionUrl, null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        JSONArray descriptions = response.getJSONArray("flavor_text_entries");
+                        JSONObject defaultEntry = descriptions.getJSONObject(0);
+                        String description = defaultEntry.getString("flavor_text");
+                        pokemonDescription.setText(description);
+                    } catch (JSONException e) {
+                        Log.e("cs50", "Pokemon Species Json error", e);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("cs50", "Pokemon description error");
+                }
+            }
         );
 
-        requestQueue.add(request);
+        requestQueue.add(request2);
     }
 
     public void toggleCatch(View view) {
