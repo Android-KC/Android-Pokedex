@@ -1,7 +1,6 @@
 # Android-Pokedex
 A Pokemon Pokedex Mobile App for Android
-
-<img src="https://github.com/kevin1choi/Android-Pokedex/blob/main/PokedexPreview.gif" width="360" height="640"/>
+![Preview](https://github.com/kevin1choi/Android-Pokedex/blob/main/PokedexPreview.gif)
 
 ## Notes
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This project is a sample mobile app for android that lists
