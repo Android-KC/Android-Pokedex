@@ -146,9 +146,14 @@ public class PokemonActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         JSONArray descriptions = response.getJSONArray("flavor_text_entries");
-                        JSONObject defaultEntry = descriptions.getJSONObject(0);
-                        String description = defaultEntry.getString("flavor_text");
-                        pokemonDescription.setText(description);
+                        for (int i = 0; i < descriptions.length(); i++) {
+                            JSONObject defaultEntry = descriptions.getJSONObject(i);
+                            if (defaultEntry.getJSONObject("language").getString("name").equals("en")) {
+                                String description = defaultEntry.getString("flavor_text");
+                                pokemonDescription.setText(description);
+                                break;
+                            }
+                        }
                     } catch (JSONException e) {
                         Log.e("cs50", "Pokemon Species Json error", e);
                     }

@@ -14,7 +14,11 @@ have been caught will be saved through reboots of the app.
 
 ## Installation
 
-To be determined.
+Download the apk in the link below and install on your Android device.
+- [Pokemon App APK](https://github.com/kevin1choi/Android-Pokedex/blob/main/Pokedex/app/release/app-release.apk)
+
+Minimum Supported Version:
+- Android 5.0 Lollipop
 
 ## Questions
 Contact: kevin1choi@gmail.com
