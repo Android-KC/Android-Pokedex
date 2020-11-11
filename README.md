@@ -1,7 +1,7 @@
 # Android-Pokedex
 A Pokemon Pokedex Mobile App for Android
 
-![Preview](https://github.com/BCS-WebDev/Week11-Homework/blob/master/burger/BurgerHelper.gif)
+<img src="https://github.com/kevin1choi/Android-Pokedex/blob/main/PokedexPreview.gif" width="360" height="640"/>
 
 ## Notes
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This project is a sample mobile app for android that lists
