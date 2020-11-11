@@ -1,5 +1,6 @@
 # Android-Pokedex
 A Pokemon Pokedex Mobile App for Android
+
 ![Preview](https://github.com/kevin1choi/Android-Pokedex/blob/main/PokedexPreview.gif)
 
 ## Notes
